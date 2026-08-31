@@ -164,6 +164,7 @@ function iniciarMusica() {
 //  ALIAS DE LUNA DE MIEL (copiar al tocar)
 // ============================================================
 const btnAlias = document.getElementById("btnAlias");
+const aliasFeedback = document.getElementById("aliasFeedback");
 const ALIAS = "agusysol2026";
 
 if (btnAlias) {
@@ -179,7 +180,13 @@ if (btnAlias) {
       aux.remove();
     }
 
-    btnAlias.classList.add("activo");
-    setTimeout(() => btnAlias.classList.remove("activo"), 2000);
+    if (aliasFeedback) {
+      aliasFeedback.textContent = "¡Alias copiado!";
+      aliasFeedback.classList.add("activo");
+      setTimeout(() => {
+        aliasFeedback.textContent = "Tocá para copiar";
+        aliasFeedback.classList.remove("activo");
+      }, 2000);
+    }
   });
 }

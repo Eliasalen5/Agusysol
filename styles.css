@@ -303,39 +303,36 @@ body {
 }
 
 .alias {
-  position: relative;
-  margin: 1.4rem auto 0;
-  padding: 0.75rem 2rem;
-  border: 1px dashed #c9a86a;
-  border-radius: 10px;
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.35rem 0.5rem;
   background: transparent;
+  border: none;
+  border-bottom: 1px dashed #c9a86a;
   color: #c9a86a;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.15rem, 4.5vw, 1.45rem);
-  letter-spacing: 0.16em;
+  font-size: clamp(1.3rem, 5vw, 1.7rem);
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: color 0.2s;
 }
 
 .alias:hover {
-  background: #2e2a22;
+  color: #e6d7b7;
 }
 
-.alias-copiado {
-  display: block;
-  margin-top: 0.45rem;
+.alias-feedback {
+  margin-top: 0.6rem;
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: none;
-  color: #8fd696;
-  opacity: 0;
-  transition: opacity 0.25s;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  color: #9a927f;
+  transition: color 0.25s;
 }
 
-.alias.activo .alias-copiado {
-  opacity: 1;
+.alias-feedback.activo {
+  color: #8fd696;
 }
 
 .detalle-adultos {
