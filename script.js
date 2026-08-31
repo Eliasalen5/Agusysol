@@ -78,7 +78,6 @@ if (form) {
 
     const nombre = form.nombre.value.trim();
     const telefono = form.telefono.value.trim();
-    const acompanantes = parseInt(form.acompanantes.value, 10);
     const asiste = form.querySelector('input[name="asiste"]:checked');
     const restricciones = form.restricciones.value.trim();
     const musica = form.musica.value.trim();
@@ -95,12 +94,6 @@ if (form) {
       feedback.classList.add("error");
       return;
     }
-    if (Number.isNaN(acompanantes) || acompanantes < 0) {
-      marcarInvalido(form.acompanantes);
-      feedback.textContent = "Indicá una cantidad válida de acompañantes.";
-      feedback.classList.add("error");
-      return;
-    }
 
     btnEnviar.disabled = true;
     btnEnviar.textContent = "Enviando…";
@@ -109,7 +102,6 @@ if (form) {
       await db.collection("confirmaciones").add({
         nombre,
         telefono,
-        acompanantes,
         asiste: asiste.value === "si",
         restricciones,
         musica,
@@ -120,7 +112,6 @@ if (form) {
       feedback.textContent = "¡Gracias! Tu confirmación fue recibida. 💛";
       feedback.classList.add("ok");
       form.reset();
-      form.acompanantes.value = "0";
     } catch (error) {
       console.error("Error al guardar la confirmación:", error);
       feedback.textContent = "Hubo un problema al enviar. Intentá de nuevo.";

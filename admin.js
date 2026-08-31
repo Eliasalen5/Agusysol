@@ -116,7 +116,6 @@ function dibujarConfirmaciones(snapshot) {
   let total = 0;
   let asisten = 0;
   let noAsisten = 0;
-  let invitados = 0;
 
   const docs = [];
   snapshot.forEach((doc) => {
@@ -125,7 +124,6 @@ function dibujarConfirmaciones(snapshot) {
     total++;
     if (d.asiste) {
       asisten++;
-      invitados += 1 + (Number(d.acompanantes) || 0);
     } else {
       noAsisten++;
     }
@@ -134,7 +132,6 @@ function dibujarConfirmaciones(snapshot) {
   document.getElementById("cTotal").textContent = total;
   document.getElementById("cAsisten").textContent = asisten;
   document.getElementById("cNoAsisten").textContent = noAsisten;
-  document.getElementById("cInvitados").textContent = invitados;
 
   if (!docs.length) {
     lista.innerHTML = '<p class="vacio">Todavía no hay confirmaciones.</p>';
@@ -149,7 +146,6 @@ function dibujarConfirmaciones(snapshot) {
             timeStyle: "short"
           })
         : "—";
-      const acompanantes = Number(d.acompanantes) || 0;
       const telefono = d.telefono ? `<div class="detalle">📞 ${escapar(d.telefono)}</div>` : "";
       const restricciones = d.restricciones ? `<div class="detalle">🍽 ${escapar(d.restricciones)}</div>` : "";
       const musica = d.musica ? `<div class="detalle">🎵 ${escapar(d.musica)}</div>` : "";
@@ -158,9 +154,7 @@ function dibujarConfirmaciones(snapshot) {
         <div class="confirmacion ${d.asiste ? "" : "no-asiste"}">
           <div class="nombre">${escapar(d.nombre)}</div>
           <div class="detalle">
-            ${d.asiste
-              ? `Asiste${acompanantes ? ` · ${acompanantes} acompañante${acompanantes === 1 ? "" : "s"}` : ""}`
-              : "No podrá asistir"}
+            ${d.asiste ? "Asiste" : "No podrá asistir"}
             <span> · ${fecha}</span>
           </div>
           ${telefono}
