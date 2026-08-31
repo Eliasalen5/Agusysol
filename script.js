@@ -77,8 +77,11 @@ if (form) {
     }
 
     const nombre = form.nombre.value.trim();
+    const telefono = form.telefono.value.trim();
     const acompanantes = parseInt(form.acompanantes.value, 10);
     const asiste = form.querySelector('input[name="asiste"]:checked');
+    const restricciones = form.restricciones.value.trim();
+    const musica = form.musica.value.trim();
     const mensaje = form.mensaje.value.trim();
 
     if (!nombre) {
@@ -105,8 +108,11 @@ if (form) {
     try {
       await db.collection("confirmaciones").add({
         nombre,
+        telefono,
         acompanantes,
         asiste: asiste.value === "si",
+        restricciones,
+        musica,
         mensaje,
         creadoEn: firebase.firestore.FieldValue.serverTimestamp()
       });

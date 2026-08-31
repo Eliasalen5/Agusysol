@@ -150,7 +150,10 @@ function dibujarConfirmaciones(snapshot) {
           })
         : "—";
       const acompanantes = Number(d.acompanantes) || 0;
-      const mensaje = d.mensaje ? `<div class="mensaje">“${d.mensaje}”</div>` : "";
+      const telefono = d.telefono ? `<div class="detalle">📞 ${escapar(d.telefono)}</div>` : "";
+      const restricciones = d.restricciones ? `<div class="detalle">🍽 ${escapar(d.restricciones)}</div>` : "";
+      const musica = d.musica ? `<div class="detalle">🎵 ${escapar(d.musica)}</div>` : "";
+      const mensaje = d.mensaje ? `<div class="mensaje">"${escapar(d.mensaje)}"</div>` : "";
       return `
         <div class="confirmacion ${d.asiste ? "" : "no-asiste"}">
           <div class="nombre">${escapar(d.nombre)}</div>
@@ -160,6 +163,9 @@ function dibujarConfirmaciones(snapshot) {
               : "No podrá asistir"}
             <span> · ${fecha}</span>
           </div>
+          ${telefono}
+          ${restricciones}
+          ${musica}
           ${mensaje}
         </div>`;
     })
