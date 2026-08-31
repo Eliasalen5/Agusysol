@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sol &amp; Agus - 21/11/2026</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="invitacion">
+    <section class="hero" aria-label="Carrusel de fotos">
+      <div class="carrusel" id="carrusel">
+        <div class="pista">
+          <img src="img/AA-Sol&Agus15Jun26-0051.JPG" alt="Foto 1">
+          <img src="img/AA-Sol&Agus15Jun26-0103.JPG" alt="Foto 2">
+          <img src="img/AA-Sol&Agus15Jun26-0118.JPG" alt="Foto 3">
+          <img src="img/AA-Sol&Agus15Jun26-0237.JPG" alt="Foto 4">
+          <img src="img/AA-Sol&Agus15Jun26-0308.JPG" alt="Foto 5">
+          <img src="img/AA-Sol&Agus15Jun26-0462.JPG" alt="Foto 6">
+          <img src="img/AA-Sol&Agus15Jun26-0492.JPG" alt="Foto 7">
+          <img src="img/AA-Sol&Agus15Jun26-0542.JPG" alt="Foto 8">
+          <img src="img/AA-Sol&Agus15Jun26-0718.JPG" alt="Foto 9">
+          <img src="img/AA-Sol&Agus15Jun26-0722.JPG" alt="Foto 10">
+          <img src="img/AA-Sol&Agus15Jun26-0745.JPG" alt="Foto 11">
+          <img src="img/AA-Sol&Agus15Jun26-0747.JPG" alt="Foto 12">
+          <img src="img/AA-Sol&Agus15Jun26-0867.JPG" alt="Foto 13">
+        </div>
+      </div>
+      <div class="hero-texto">
+        <h1>Sol &amp; Agus</h1>
+        <p class="fecha">21 · Noviembre · 2026</p>
+      </div>
+    </section>
+
+    <section class="seccion" aria-label="Confirmación de asistencia">
+      <div class="tarjeta">
+        <h2>Nos casamos y te esperamos</h2>
+        <p class="subtitulo">Confirmanos tu presencia para no quedarnos sin baile.</p>
+
+        <form id="formularioRsvp" novalidate>
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellido" required>
+
+          <label for="acompanantes">Cantidad de acompañantes</label>
+          <input type="number" id="acompanantes" name="acompanantes" min="0" max="10" value="0" required>
+
+          <span class="etiqueta">¿Podés venir?</span>
+          <div class="opciones">
+            <label class="opcion">
+              <input type="radio" name="asiste" value="si" required>
+              <span>¡Sí, puedo asistir!</span>
+            </label>
+            <label class="opcion">
+              <input type="radio" name="asiste" value="no">
+              <span>No podré</span>
+            </label>
+          </div>
+
+          <label for="mensaje">Mensaje o felicitación <em>(opcional)</em></label>
+          <textarea id="mensaje" name="mensaje" rows="4" placeholder="Una frase para la pareja"></textarea>
+
+          <button type="submit" class="btn" id="btnEnviar">Confirmar asistencia</button>
+          <p class="feedback" id="feedback" role="status"></p>
+        </form>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <p>Hecho con amor para nuestros invitados</p>
+      <a href="admin.html" class="admin-link" aria-hidden="true" tabindex="-1">&middot;</a>
+    </footer>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-init.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

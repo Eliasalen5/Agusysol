@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel del Owner | Sol &amp; Agus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="panel">
+    <h1>Panel del Owner</h1>
+    <p class="sub">Confirmaciones de la invitación</p>
+
+    <!-- Marcador para que no exista un botón "Atrás" -->
+    <div id="vista-login" hidden>
+      <form id="formLogin" class="caja-login" novalidate>
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" name="email" placeholder="owner@email.com" required>
+        <label for="loginPass">Contraseña</label>
+        <input type="password" id="loginPass" name="password" placeholder="••••••••" required>
+        <button type="submit" class="btn" id="btnLogin">Entrar</button>
+        <p class="feedback" id="loginFeedback" role="status"></p>
+      </form>
+    </div>
+
+    <div id="vista-denegado" hidden>
+      <p class="error-panel">Acceso denegado. Esta área es solo para el owner.</p>
+    </div>
+
+    <div id="vista-panel" hidden>
+      <div class="accion-superior">
+        <button type="button" class="btn btn-sec" id="btnSalir">Cerrar sesión</button>
+      </div>
+
+      <div class="resumen">
+        <div class="cifra">
+          <strong id="cTotal">0</strong>
+          <span>Confirmaciones</span>
+        </div>
+        <div class="cifra">
+          <strong id="cAsisten">0</strong>
+          <span>Asisten</span>
+        </div>
+        <div class="cifra">
+          <strong id="cNoAsisten">0</strong>
+          <span>No asisten</span>
+        </div>
+        <div class="cifra">
+          <strong id="cInvitados">0</strong>
+          <span>Invitados totales</span>
+        </div>
+      </div>
+
+      <div id="estadoLista" class="cargando">Cargando confirmaciones…</div>
+      <div class="lista-confirmaciones" id="lista"></div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-init.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
