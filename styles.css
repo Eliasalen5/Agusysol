@@ -99,6 +99,102 @@ body {
   border-top: 1px solid #c9a86a;
 }
 
+/* ---------- Código de vestimenta ---------- */
+.vestimenta {
+  background: #201d17;
+  text-align: center;
+  padding-top: clamp(2.2rem, 7vw, 3.5rem);
+  padding-bottom: clamp(2.2rem, 7vw, 3.5rem);
+}
+
+.ornamento {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #c9a86a;
+  font-size: 1.05rem;
+}
+
+.ornamento span {
+  display: block;
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a86a88);
+}
+
+.ornamento span:last-child {
+  background: linear-gradient(90deg, #c9a86a88, transparent);
+}
+
+.titulo-seccion {
+  margin-top: 1rem;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e6d7b7;
+  font-weight: normal;
+}
+
+.titulo-seccion-en {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #9a927f;
+  margin-top: 0.4rem;
+}
+
+.tipo-vestimenta {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.35rem 1.4rem;
+  border: 1px solid #c9a86a;
+  border-radius: 999px;
+  color: #c9a86a;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.estilos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  max-width: 520px;
+  margin: 2.2rem auto 0;
+}
+
+.estilo {
+  border-top: 1px solid #c9a86a55;
+  padding: 1.25rem 0.5rem 0.4rem;
+}
+
+.estilo-nombre {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #c9a86a;
+}
+
+.estilo-detalle {
+  margin-top: 0.55rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: #f5f3ef;
+}
+
+.nota-vestimenta {
+  margin-top: 1.9rem;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #9a927f;
+}
+
 .tarjeta {
   max-width: 560px;
   margin: 0 auto;
