@@ -20,6 +20,43 @@ function iniciarCarrusel() {
 iniciarCarrusel();
 
 // ============================================================
+//  CONTADOR REGRESIVO hasta la boda
+//  (año, mes-1, día, hora, min, seg — Noviembre = 10)
+// ============================================================
+const fechaBoda = new Date(2026, 10, 21, 20, 0, 0);
+const cdDias = document.getElementById("cdDias");
+const cdHoras = document.getElementById("cdHoras");
+const cdMin = document.getElementById("cdMin");
+const cdSeg = document.getElementById("cdSeg");
+
+function pad(n) {
+  return String(n).padStart(2, "0");
+}
+
+function actualizarContador() {
+  if (!cdDias || !cdHoras || !cdMin || !cdSeg) return;
+
+  const dif = fechaBoda - new Date();
+
+  if (dif <= 0) {
+    cdDias.textContent = "00";
+    cdHoras.textContent = "00";
+    cdMin.textContent = "00";
+    cdSeg.textContent = "00";
+    return;
+  }
+
+  const segundos = Math.floor(dif / 1000);
+  cdDias.textContent = pad(Math.floor(segundos / 86400));
+  cdHoras.textContent = pad(Math.floor((segundos % 86400) / 3600));
+  cdMin.textContent = pad(Math.floor((segundos % 3600) / 60));
+  cdSeg.textContent = pad(segundos % 60);
+}
+
+actualizarContador();
+setInterval(actualizarContador, 1000);
+
+// ============================================================
 //  FORMULARIO DE CONFIRMACIÓN (RSVP -> Firestore)
 // ============================================================
 const form = document.getElementById("formularioRsvp");
