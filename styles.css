@@ -114,6 +114,18 @@ body {
   50% { transform: rotate(9deg); }
 }
 
+.contador-saludo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #e6d7b7;
+}
+
 .contador-intro {
   margin-top: 0.4rem;
   font-family: Georgia, "Times New Roman", serif;
@@ -247,6 +259,15 @@ body {
   font-size: clamp(2rem, 8vw, 3rem);
   color: #e6d7b7;
   letter-spacing: 0.12em;
+}
+
+.lugar-evento {
+  margin-top: 0.7rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: clamp(1.05rem, 4vw, 1.3rem);
+  letter-spacing: 0.08em;
+  color: #e6d7b7;
 }
 
 .coord-evento {
