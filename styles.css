@@ -438,6 +438,17 @@ textarea:focus {
   opacity: 0.35;
 }
 
+/* ---------- Reproductor de música oculto ---------- */
+.reproductor-musica {
+  position: fixed;
+  left: -9999px;
+  top: auto;
+  width: 300px;
+  height: 80px;
+  pointer-events: none;
+  z-index: -1;
+}
+
 /* ---------- Página del panel (admin.html) ---------- */
 .panel {
   max-width: 860px;

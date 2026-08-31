@@ -130,3 +130,28 @@ function marcarInvalido(campo) {
   campo.classList.add("input-invalido");
   campo.addEventListener("input", () => campo.classList.remove("input-invalido"), { once: true });
 }
+
+// ============================================================
+//  MÚSICA DE FONDO (Spotify embed, sin controles visibles)
+//  El navegador exige una interacción del usuario para sonar;
+//  se aprovecha el primer toque o scroll para iniciarla.
+// ============================================================
+const EMBED_MUSICA =
+  "https://open.spotify.com/embed/track/5nQ2EILUt0UTqlvF0w5P48?autoplay=1&theme=0";
+
+const iframeMusica = document.getElementById("iframeMusica");
+let musicaIniciada = false;
+
+function iniciarMusica() {
+  if (musicaIniciada || !iframeMusica) return;
+  musicaIniciada = true;
+  iframeMusica.src = EMBED_MUSICA;
+
+  ["pointerdown", "touchstart", "scroll", "keydown"].forEach((ev) => {
+    window.removeEventListener(ev, iniciarMusica);
+  });
+}
+
+["pointerdown", "touchstart", "scroll", "keydown"].forEach((ev) => {
+  window.addEventListener(ev, iniciarMusica);
+});
