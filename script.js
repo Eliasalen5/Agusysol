@@ -23,7 +23,7 @@ iniciarCarrusel();
 //  CONTADOR REGRESIVO hasta la boda
 //  (año, mes-1, día, hora, min, seg — Noviembre = 10)
 // ============================================================
-const fechaBoda = new Date(2026, 10, 21, 20, 0, 0);
+const fechaBoda = new Date(2026, 10, 21, 17, 0, 0);
 const cdDias = document.getElementById("cdDias");
 const cdHoras = document.getElementById("cdHoras");
 const cdMin = document.getElementById("cdMin");
