@@ -60,6 +60,18 @@
       <p class="detalle-vestimenta">Elegante y cómodo para disfrutar<br>de este día especial</p>
     </section>
 
+    <section class="seccion detalles" aria-label="Detalles adicionales">
+      <div class="ornamento"><span></span>✦<span></span></div>
+      <p class="titulo-seccion">Detalles adicionales</p>
+      <p class="detalle-presencia">Su presencia es nuestro mejor regalo.</p>
+      <p class="detalle-luna">Pero si además quieren ayudarnos a hacer realidad nuestra luna de miel, les dejamos nuestro alias:</p>
+      <button type="button" class="alias" id="btnAlias" title="Tocar para copiar">
+        agusysol2026
+        <span class="alias-copiado">¡Alias copiado!</span>
+      </button>
+      <p class="detalle-adultos">Para que todos puedan disfrutar al máximo,<br>la celebración será solo para adultos.</p>
+    </section>
+
     <section class="seccion" aria-label="Confirmación de asistencia">
       <div class="tarjeta">
         <h2>Nos casamos y te esperamos</h2>
@@ -99,11 +111,7 @@
     </footer>
   </main>
 
-  <div class="reproductor-musica" id="reproductorMusica" aria-hidden="true">
-    <iframe id="iframeMusica" title="Música de fondo"
-      allow="autoplay; encrypted-media"
-      width="300" height="80"></iframe>
-  </div>
+  <audio id="audioMusica" src="audio/musica.mp3" loop preload="auto"></audio>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>

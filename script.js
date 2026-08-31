@@ -132,26 +132,54 @@ function marcarInvalido(campo) {
 }
 
 // ============================================================
-//  MÚSICA DE FONDO (Spotify embed, sin controles visibles)
+//  MÚSICA DE FONDO (audio local, sin controles visibles)
 //  El navegador exige una interacción del usuario para sonar;
-//  se aprovecha el primer toque o scroll para iniciarla.
+//  se aprovecha el primer toque para iniciarla. El archivo debe
+//  estar en audio/musica.mp3
 // ============================================================
-const EMBED_MUSICA =
-  "https://open.spotify.com/embed/track/5nQ2EILUt0UTqlvF0w5P48?autoplay=1&theme=0";
-
-const iframeMusica = document.getElementById("iframeMusica");
+const audioMusica = document.getElementById("audioMusica");
 let musicaIniciada = false;
 
 function iniciarMusica() {
-  if (musicaIniciada || !iframeMusica) return;
+  if (musicaIniciada || !audioMusica) return;
   musicaIniciada = true;
-  iframeMusica.src = EMBED_MUSICA;
 
-  ["pointerdown", "touchstart", "scroll", "keydown"].forEach((ev) => {
+  const intento = audioMusica.play();
+  if (intento && typeof intento.catch === "function") {
+    intento.catch(() => {
+      musicaIniciada = false;
+    });
+  }
+
+  ["pointerdown", "touchstart", "keydown"].forEach((ev) => {
     window.removeEventListener(ev, iniciarMusica);
   });
 }
 
-["pointerdown", "touchstart", "scroll", "keydown"].forEach((ev) => {
+["pointerdown", "touchstart", "keydown"].forEach((ev) => {
   window.addEventListener(ev, iniciarMusica);
 });
+
+// ============================================================
+//  ALIAS DE LUNA DE MIEL (copiar al tocar)
+// ============================================================
+const btnAlias = document.getElementById("btnAlias");
+const ALIAS = "agusysol2026";
+
+if (btnAlias) {
+  btnAlias.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(ALIAS);
+    } catch (error) {
+      const aux = document.createElement("textarea");
+      aux.value = ALIAS;
+      document.body.appendChild(aux);
+      aux.select();
+      document.execCommand("copy");
+      aux.remove();
+    }
+
+    btnAlias.classList.add("activo");
+    setTimeout(() => btnAlias.classList.remove("activo"), 2000);
+  });
+}
