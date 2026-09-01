@@ -713,6 +713,10 @@ textarea:focus {
 }
 
 /* ---------- Modal cambio de contraseña ---------- */
+.modal-fondo[hidden] {
+  display: none;
+}
+
 .modal-fondo {
   position: fixed;
   inset: 0;
