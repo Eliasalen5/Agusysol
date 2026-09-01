@@ -29,6 +29,7 @@
 
     <div id="vista-panel" hidden>
       <div class="accion-superior">
+        <button type="button" class="btn btn-sec" id="btnCambiarPass">Cambiar contraseña</button>
         <button type="button" class="btn btn-sec" id="btnSalir">Cerrar sesión</button>
       </div>
 
@@ -49,6 +50,28 @@
 
       <div id="estadoLista" class="cargando">Cargando confirmaciones…</div>
       <div class="lista-confirmaciones" id="lista"></div>
+    </div>
+
+    <div class="modal-fondo" id="modalPass" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalPassTitulo">
+        <h2 id="modalPassTitulo">Cambiar contraseña</h2>
+        <form id="formPass" novalidate>
+          <label for="passActual">Contraseña actual</label>
+          <input type="password" id="passActual" name="passActual" autocomplete="current-password" required>
+
+          <label for="passNueva">Nueva contraseña</label>
+          <input type="password" id="passNueva" name="passNueva" autocomplete="new-password" required>
+
+          <label for="passConfirm">Confirmar nueva contraseña</label>
+          <input type="password" id="passConfirm" name="passConfirm" autocomplete="new-password" required>
+
+          <div class="modal-acciones">
+            <button type="button" class="btn btn-sec" id="btnCancelarPass">Cancelar</button>
+            <button type="submit" class="btn" id="btnGuardarPass">Guardar</button>
+          </div>
+          <p class="feedback" id="passFeedback" role="status"></p>
+        </form>
+      </div>
     </div>
   </main>
 

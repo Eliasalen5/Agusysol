@@ -695,6 +695,7 @@ textarea:focus {
 .accion-superior {
   display: flex;
   justify-content: flex-end;
+  gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
 
@@ -709,6 +710,48 @@ textarea:focus {
 
 .btn-sec:hover {
   background: #2e2a22;
+}
+
+/* ---------- Modal cambio de contraseña ---------- */
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal {
+  width: 100%;
+  max-width: 380px;
+  background: #26221c;
+  border: 1px solid #c9a86a66;
+  border-radius: 10px;
+  padding: clamp(1.4rem, 5vw, 2rem) clamp(1.1rem, 5vw, 1.75rem);
+}
+
+.modal h2 {
+  margin: 0 0 1.25rem;
+  font-family: Georgia, serif;
+  font-weight: normal;
+  color: #e6d7b7;
+  text-align: center;
+}
+
+.modal-acciones {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.modal-acciones .btn {
+  width: auto;
+  margin-top: 0;
+  flex: 1;
+  padding: 0.7rem 1rem;
 }
 
 .resumen {

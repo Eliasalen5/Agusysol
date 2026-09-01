@@ -8,6 +8,12 @@ const formLogin = document.getElementById("formLogin");
 const loginFeedback = document.getElementById("loginFeedback");
 const btnLogin = document.getElementById("btnLogin");
 const btnSalir = document.getElementById("btnSalir");
+const btnCambiarPass = document.getElementById("btnCambiarPass");
+const btnCancelarPass = document.getElementById("btnCancelarPass");
+const btnGuardarPass = document.getElementById("btnGuardarPass");
+const modalPass = document.getElementById("modalPass");
+const formPass = document.getElementById("formPass");
+const passFeedback = document.getElementById("passFeedback");
 const lista = document.getElementById("lista");
 const estadoLista = document.getElementById("estadoLista");
 
@@ -67,6 +73,99 @@ if (formLogin) {
 
 if (btnSalir) {
   btnSalir.addEventListener("click", () => authApp.signOut());
+}
+
+// ---------- Cambio de contraseña ----------
+function abrirModalPass() {
+  passFeedback.textContent = "";
+  passFeedback.className = "feedback";
+  formPass.reset();
+  modalPass.hidden = false;
+  formPass.passActual.focus();
+}
+
+function cerrarModalPass() {
+  modalPass.hidden = true;
+  passFeedback.textContent = "";
+  passFeedback.className = "feedback";
+}
+
+if (btnCambiarPass) {
+  btnCambiarPass.addEventListener("click", abrirModalPass);
+}
+
+if (btnCancelarPass) {
+  btnCancelarPass.addEventListener("click", cerrarModalPass);
+}
+
+if (modalPass) {
+  modalPass.addEventListener("click", (e) => {
+    if (e.target === modalPass) cerrarModalPass();
+  });
+}
+
+if (formPass && btnGuardarPass) {
+  formPass.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    passFeedback.textContent = "";
+    passFeedback.className = "feedback";
+
+    const actual = formPass.passActual.value;
+    const nueva = formPass.passNueva.value;
+    const confirm = formPass.passConfirm.value;
+
+    if (!actual || !nueva || !confirm) {
+      passFeedback.textContent = "Completá todos los campos.";
+      passFeedback.classList.add("error");
+      return;
+    }
+    if (nueva.length < 6) {
+      passFeedback.textContent = "La contraseña debe tener al menos 6 caracteres.";
+      passFeedback.classList.add("error");
+      return;
+    }
+    if (nueva !== confirm) {
+      passFeedback.textContent = "Las contraseñas no coinciden.";
+      passFeedback.classList.add("error");
+      return;
+    }
+    if (nueva === actual) {
+      passFeedback.textContent = "La nueva contraseña debe ser distinta de la actual.";
+      passFeedback.classList.add("error");
+      return;
+    }
+
+    btnGuardarPass.disabled = true;
+    btnGuardarPass.textContent = "Guardando…";
+
+    try {
+      const usuario = authApp.currentUser;
+      if (!usuario) throw { code: "auth/sesion-expirada" };
+
+      const credencial = firebase.auth.EmailAuthProvider.credential(usuario.email, actual);
+      await usuario.reauthenticateWithCredential(credencial);
+      await usuario.updatePassword(nueva);
+
+      passFeedback.classList.add("ok");
+      passFeedback.textContent = "Contraseña actualizada correctamente.";
+      setTimeout(cerrarModalPass, 1400);
+    } catch (error) {
+      console.error("Error al cambiar contraseña:", error);
+      let mensaje = "No se pudo actualizar la contraseña.";
+      if (error.code === "auth/wrong-password") {
+        mensaje = "La contraseña actual no es correcta.";
+      } else if (error.code === "auth/weak-password") {
+        mensaje = "La contraseña debe tener al menos 6 caracteres.";
+      } else if (error.code === "auth/too-many-requests") {
+        mensaje = "Demasiados intentos. Esperá un momento y volvé a intentar.";
+      }
+      passFeedback.textContent = mensaje;
+      passFeedback.classList.add("error");
+    } finally {
+      btnGuardarPass.disabled = false;
+      btnGuardarPass.textContent = "Guardar";
+    }
+  });
 }
 
 authApp.onAuthStateChanged((user) => {
