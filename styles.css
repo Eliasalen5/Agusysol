@@ -109,6 +109,15 @@ body {
   animation: brindis 2.4s ease-in-out infinite;
 }
 
+.copas-derecha {
+  animation-name: brindis-derecha;
+}
+
+@keyframes brindis-derecha {
+  0%, 100% { transform: rotate(9deg); }
+  50% { transform: rotate(-9deg); }
+}
+
 @keyframes brindis {
   0%, 100% { transform: rotate(-9deg); }
   50% { transform: rotate(9deg); }
@@ -603,6 +612,14 @@ textarea:focus {
 .btn:disabled {
   opacity: 0.6;
   cursor: wait;
+}
+
+.fecha-limite {
+  margin-top: 1.1rem;
+  text-align: center;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.88rem;
+  color: #9a927f;
 }
 
 .feedback {
