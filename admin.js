@@ -219,6 +219,57 @@ function suscribirConfirmaciones() {
     );
 }
 
+// ---------- Migración: re-clava documentos viejos (creados con .add())
+// a la clave única nombre__teléfono, para que el formulario público
+// pueda detectar duplicados también contra las confirmaciones antiguas.
+let migrandoIds = false;
+
+function migrarIdsAntiguos(docs) {
+  if (migrandoIds || !docs.length) return;
+
+  const pendientes = [];
+  const reclamadas = new Set();
+
+  for (const d of docs) {
+    if (typeof d.nombre !== "string" || !d.nombre.trim()) continue;
+    const clave = claveConfirmacion(d.nombre, d.telefono || "");
+    if (clave === d.id) continue;
+    if (docsCache.has(clave) || reclamadas.has(clave)) continue;
+    reclamadas.add(clave);
+    pendientes.push({ d, clave });
+  }
+
+  if (!pendientes.length) return;
+
+  migrandoIds = true;
+  (async () => {
+    try {
+      for (const { d, clave } of pendientes) {
+        try {
+          const coleccion = db.collection("confirmaciones");
+          const lote = db.batch();
+          lote.set(coleccion.doc(clave), {
+            nombre: d.nombre,
+            telefono: d.telefono || "",
+            asiste: !!d.asiste,
+            restricciones: d.restricciones || "",
+            musica: d.musica || "",
+            mensaje: d.mensaje || "",
+            creadoEn: d.creadoEn || firebase.firestore.FieldValue.serverTimestamp()
+          });
+          lote.delete(coleccion.doc(d.id));
+          await lote.commit();
+          console.info(`Confirmación re-clavada: "${d.nombre}" → ${clave}`);
+        } catch (error) {
+          console.warn(`No se pudo re-clavar la confirmación de "${d.nombre}":`, error);
+        }
+      }
+    } finally {
+      migrandoIds = false;
+    }
+  })();
+}
+
 function dibujarConfirmaciones(snapshot) {
   estadoLista.hidden = true;
 
@@ -243,6 +294,8 @@ function dibujarConfirmaciones(snapshot) {
   document.getElementById("cTotal").textContent = total;
   document.getElementById("cAsisten").textContent = asisten;
   document.getElementById("cNoAsisten").textContent = noAsisten;
+
+  migrarIdsAntiguos(docs);
 
   if (!docs.length) {
     lista.innerHTML = '<p class="vacio">Todavía no hay confirmaciones.</p>';
