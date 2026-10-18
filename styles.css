@@ -817,6 +817,35 @@ textarea:focus {
   overflow-wrap: anywhere;
 }
 
+.confirmacion-acciones {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.btn-mini {
+  width: auto;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.78rem;
+  margin-top: 0;
+  background: transparent;
+  border: 1px solid #4a443a;
+  color: #e6d7b7;
+}
+
+.btn-mini:hover {
+  background: #2e2a22;
+}
+
+.btn-peligro {
+  border-color: #7a3c3a;
+  color: #e07a76;
+}
+
+.btn-peligro:hover {
+  background: #3a2220;
+}
+
 .vacio,
 .cargando {
   text-align: center;

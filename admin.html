@@ -29,6 +29,7 @@
 
     <div id="vista-panel" hidden>
       <div class="accion-superior">
+        <button type="button" class="btn" id="btnAgregar">Agregar confirmación</button>
         <button type="button" class="btn btn-sec" id="btnCambiarPass">Cambiar contraseña</button>
         <button type="button" class="btn btn-sec" id="btnSalir">Cerrar sesión</button>
       </div>
@@ -50,6 +51,46 @@
 
       <div id="estadoLista" class="cargando">Cargando confirmaciones…</div>
       <div class="lista-confirmaciones" id="lista"></div>
+    </div>
+
+    <div class="modal-fondo" id="modalConfirmacion" hidden>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalConfirmacionTitulo">
+        <h2 id="modalConfirmacionTitulo">Agregar confirmación</h2>
+        <form id="formConfirmacion" novalidate>
+          <label for="confNombre">Nombre completo</label>
+          <input type="text" id="confNombre" name="nombre" placeholder="Nombre y apellido" required>
+
+          <label for="confTelefono">Número de contacto</label>
+          <input type="text" id="confTelefono" name="telefono" inputmode="tel" placeholder="Número de WhatsApp" required>
+
+          <span class="etiqueta">¿Asiste?</span>
+          <div class="opciones">
+            <label class="opcion">
+              <input type="radio" name="confAsiste" value="si" required>
+              <span>Sí, asiste</span>
+            </label>
+            <label class="opcion">
+              <input type="radio" name="confAsiste" value="no">
+              <span>No podrá asistir</span>
+            </label>
+          </div>
+
+          <label for="confRestricciones">Restricciones alimentarias <em>(opcional)</em></label>
+          <input type="text" id="confRestricciones" name="restricciones" placeholder="Ej: vegetariano, sin gluten">
+
+          <label for="confMusica">Recomendación musical <em>(opcional)</em></label>
+          <input type="text" id="confMusica" name="musica" placeholder="Canción para bailar">
+
+          <label for="confMensaje">Mensaje o felicitación <em>(opcional)</em></label>
+          <textarea id="confMensaje" name="mensaje" rows="3" placeholder="Un mensaje para la pareja"></textarea>
+
+          <div class="modal-acciones">
+            <button type="button" class="btn btn-sec" id="btnCancelarConfirmacion">Cancelar</button>
+            <button type="submit" class="btn" id="btnGuardarConfirmacion">Guardar</button>
+          </div>
+          <p class="feedback" id="confirmacionFeedback" role="status"></p>
+        </form>
+      </div>
     </div>
 
     <div class="modal-fondo" id="modalPass" hidden>
@@ -80,6 +121,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="firebase-config.js"></script>
   <script src="firebase-init.js"></script>
+  <script src="util.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>

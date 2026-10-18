@@ -89,6 +89,12 @@ if (form) {
       feedback.classList.add("error");
       return;
     }
+    if (!telefono) {
+      marcarInvalido(form.telefono);
+      feedback.textContent = "Dejanos tu número así te podemos contactar.";
+      feedback.classList.add("error");
+      return;
+    }
     if (!asiste) {
       feedback.textContent = "Decinos si podés venir para preparar todo.";
       feedback.classList.add("error");
@@ -99,7 +105,22 @@ if (form) {
     btnEnviar.textContent = "Enviando…";
 
     try {
-      await db.collection("confirmaciones").add({
+      const clave = claveConfirmacion(nombre, telefono);
+      const ref = db.collection("confirmaciones").doc(clave);
+
+      try {
+        const previo = await ref.get();
+        if (previo.exists) {
+          feedback.textContent =
+            "Ya habías confirmado tu asistencia. Si querés cambiar algo, escribinos directamente. 💛";
+          feedback.classList.add("error");
+          return;
+        }
+      } catch (error) {
+        if (error.code !== "permission-denied") throw error;
+      }
+
+      await ref.set({
         nombre,
         telefono,
         asiste: asiste.value === "si",

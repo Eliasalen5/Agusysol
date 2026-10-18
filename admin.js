@@ -1,5 +1,5 @@
 // ============================================================
-//  PANEL DEL OWNER — login + lectura de confirmaciones
+//  PANEL DEL OWNER — login + gestionar confirmaciones
 // ============================================================
 const vistaLogin = document.getElementById("vista-login");
 const vistaDenegado = document.getElementById("vista-denegado");
@@ -16,8 +16,17 @@ const formPass = document.getElementById("formPass");
 const passFeedback = document.getElementById("passFeedback");
 const lista = document.getElementById("lista");
 const estadoLista = document.getElementById("estadoLista");
+const btnAgregar = document.getElementById("btnAgregar");
+const modalConfirmacion = document.getElementById("modalConfirmacion");
+const formConfirmacion = document.getElementById("formConfirmacion");
+const modalConfirmacionTitulo = document.getElementById("modalConfirmacionTitulo");
+const btnCancelarConfirmacion = document.getElementById("btnCancelarConfirmacion");
+const btnGuardarConfirmacion = document.getElementById("btnGuardarConfirmacion");
+const confirmacionFeedback = document.getElementById("confirmacionFeedback");
 
 let desuscribir = null;
+let editandoId = null;
+let editandoCreadoEn = null;
 
 const ownersSet = new Set(
   Array.isArray(OWNER_EMAILS)
@@ -250,7 +259,7 @@ function dibujarConfirmaciones(snapshot) {
       const musica = d.musica ? `<div class="detalle">🎵 ${escapar(d.musica)}</div>` : "";
       const mensaje = d.mensaje ? `<div class="mensaje">"${escapar(d.mensaje)}"</div>` : "";
       return `
-        <div class="confirmacion ${d.asiste ? "" : "no-asiste"}">
+        <div class="confirmacion ${d.asiste ? "" : "no-asiste"}" data-id="${escapar(d.id)}">
           <div class="nombre">${escapar(d.nombre)}</div>
           <div class="detalle">
             ${d.asiste ? "Asiste" : "No podrá asistir"}
@@ -260,9 +269,180 @@ function dibujarConfirmaciones(snapshot) {
           ${restricciones}
           ${musica}
           ${mensaje}
+          <div class="confirmacion-acciones">
+            <button type="button" class="btn btn-mini" data-accion="editar">Editar</button>
+            <button type="button" class="btn btn-mini btn-peligro" data-accion="borrar">Eliminar</button>
+          </div>
         </div>`;
     })
     .join("");
+}
+
+// ---------- Borrar / editar / agregar ----------
+if (lista) {
+  lista.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-accion]");
+    if (!btn) return;
+
+    const tarjeta = btn.closest(".confirmacion");
+    const id = tarjeta && tarjeta.dataset.id;
+    if (!id) return;
+
+    if (btn.dataset.accion === "borrar") {
+      const nombre = tarjeta.querySelector(".nombre").textContent;
+      if (!confirm(`¿Eliminar la confirmación de ${nombre}?`)) return;
+
+      btn.disabled = true;
+      try {
+        await db.collection("confirmaciones").doc(id).delete();
+      } catch (error) {
+        console.error("Error al eliminar:", error);
+        alert("No se pudo eliminar. Revisá la consola para más detalle.");
+        btn.disabled = false;
+      }
+    }
+
+    if (btn.dataset.accion === "editar") {
+      const snap = await db.collection("confirmaciones").doc(id).get();
+      if (!snap.exists) {
+        alert("Esta confirmación ya no existe.");
+        return;
+      }
+      abrirModalConfirmacion("editar", { id: snap.id, ...snap.data() });
+    }
+  });
+}
+
+function abrirModalConfirmacion(modo, datos) {
+  editandoId = modo === "editar" ? datos.id : null;
+  editandoCreadoEn = modo === "editar" ? datos.creadoEn || null : null;
+  modalConfirmacionTitulo.textContent = modo === "editar" ? "Editar confirmación" : "Agregar confirmación";
+  confirmacionFeedback.textContent = "";
+  confirmacionFeedback.className = "feedback";
+  formConfirmacion.reset();
+
+  if (modo === "editar") {
+    formConfirmacion.nombre.value = datos.nombre || "";
+    formConfirmacion.telefono.value = datos.telefono || "";
+    const asisteRadio = formConfirmacion.querySelector(`input[name="confAsiste"][value="${datos.asiste ? "si" : "no"}"]`);
+    if (asisteRadio) asisteRadio.checked = true;
+    formConfirmacion.restricciones.value = datos.restricciones || "";
+    formConfirmacion.musica.value = datos.musica || "";
+    formConfirmacion.mensaje.value = datos.mensaje || "";
+  }
+
+  modalConfirmacion.hidden = false;
+  formConfirmacion.nombre.focus();
+}
+
+function cerrarModalConfirmacion() {
+  modalConfirmacion.hidden = true;
+  editandoId = null;
+  editandoCreadoEn = null;
+}
+
+if (btnAgregar) {
+  btnAgregar.addEventListener("click", () => abrirModalConfirmacion("agregar"));
+}
+
+if (btnCancelarConfirmacion) {
+  btnCancelarConfirmacion.addEventListener("click", cerrarModalConfirmacion);
+}
+
+if (modalConfirmacion) {
+  modalConfirmacion.addEventListener("click", (e) => {
+    if (e.target === modalConfirmacion) cerrarModalConfirmacion();
+  });
+}
+
+if (formConfirmacion && btnGuardarConfirmacion) {
+  formConfirmacion.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    confirmacionFeedback.textContent = "";
+    confirmacionFeedback.className = "feedback";
+
+    const nombre = formConfirmacion.nombre.value.trim();
+    const telefono = formConfirmacion.telefono.value.trim();
+    const asisteInput = formConfirmacion.querySelector('input[name="confAsiste"]:checked');
+    const restricciones = formConfirmacion.restricciones.value.trim();
+    const musica = formConfirmacion.musica.value.trim();
+    const mensaje = formConfirmacion.mensaje.value.trim();
+
+    if (!nombre) {
+      confirmacionFeedback.textContent = "Ingresá el nombre.";
+      confirmacionFeedback.classList.add("error");
+      return;
+    }
+    if (!telefono) {
+      confirmacionFeedback.textContent = "Ingresá el teléfono.";
+      confirmacionFeedback.classList.add("error");
+      return;
+    }
+    if (!asisteInput) {
+      confirmacionFeedback.textContent = "Elegí si asiste o no.";
+      confirmacionFeedback.classList.add("error");
+      return;
+    }
+
+    const clave = claveConfirmacion(nombre, telefono);
+    const coleccion = db.collection("confirmaciones");
+
+    btnGuardarConfirmacion.disabled = true;
+    btnGuardarConfirmacion.textContent = "Guardando…";
+
+    try {
+      const datos = {
+        nombre,
+        telefono,
+        asiste: asisteInput.value === "si",
+        restricciones,
+        musica,
+        mensaje
+      };
+
+      if (!editandoId) {
+        const previo = await coleccion.doc(clave).get();
+        if (previo.exists) {
+          confirmacionFeedback.textContent = "Ya existe una confirmación con ese nombre y teléfono.";
+          confirmacionFeedback.classList.add("error");
+          btnGuardarConfirmacion.disabled = false;
+          btnGuardarConfirmacion.textContent = "Guardar";
+          return;
+        }
+        await coleccion.doc(clave).set({
+          ...datos,
+          creadoEn: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      } else if (editandoId !== clave) {
+        const previo = await coleccion.doc(clave).get();
+        if (previo.exists) {
+          confirmacionFeedback.textContent = "Ya existe otra confirmación con ese nombre y teléfono.";
+          confirmacionFeedback.classList.add("error");
+          btnGuardarConfirmacion.disabled = false;
+          btnGuardarConfirmacion.textContent = "Guardar";
+          return;
+        }
+        const lote = db.batch();
+        lote.set(coleccion.doc(clave), {
+          ...datos,
+          creadoEn: editandoCreadoEn || firebase.firestore.FieldValue.serverTimestamp()
+        });
+        lote.delete(coleccion.doc(editandoId));
+        await lote.commit();
+      } else {
+        await coleccion.doc(editandoId).update(datos);
+      }
+
+      cerrarModalConfirmacion();
+    } catch (error) {
+      console.error("Error al guardar la confirmación:", error);
+      confirmacionFeedback.textContent = "No se pudo guardar. Revisá la consola para más detalle.";
+      confirmacionFeedback.classList.add("error");
+    } finally {
+      btnGuardarConfirmacion.disabled = false;
+      btnGuardarConfirmacion.textContent = "Guardar";
+    }
+  });
 }
 
 function escapar(texto) {
