@@ -27,6 +27,7 @@ const confirmacionFeedback = document.getElementById("confirmacionFeedback");
 let desuscribir = null;
 let editandoId = null;
 let editandoCreadoEn = null;
+const docsCache = new Map();
 
 const ownersSet = new Set(
   Array.isArray(OWNER_EMAILS)
@@ -226,9 +227,11 @@ function dibujarConfirmaciones(snapshot) {
   let noAsisten = 0;
 
   const docs = [];
+  docsCache.clear();
   snapshot.forEach((doc) => {
     const d = doc.data();
     docs.push({ id: doc.id, ...d });
+    docsCache.set(doc.id, d);
     total++;
     if (d.asiste) {
       asisten++;
@@ -303,12 +306,12 @@ if (lista) {
     }
 
     if (btn.dataset.accion === "editar") {
-      const snap = await db.collection("confirmaciones").doc(id).get();
-      if (!snap.exists) {
+      const datos = docsCache.get(id);
+      if (!datos) {
         alert("Esta confirmación ya no existe.");
         return;
       }
-      abrirModalConfirmacion("editar", { id: snap.id, ...snap.data() });
+      abrirModalConfirmacion("editar", { id, ...datos });
     }
   });
 }
@@ -401,8 +404,7 @@ if (formConfirmacion && btnGuardarConfirmacion) {
       };
 
       if (!editandoId) {
-        const previo = await coleccion.doc(clave).get();
-        if (previo.exists) {
+        if (docsCache.has(clave)) {
           confirmacionFeedback.textContent = "Ya existe una confirmación con ese nombre y teléfono.";
           confirmacionFeedback.classList.add("error");
           btnGuardarConfirmacion.disabled = false;
@@ -414,8 +416,7 @@ if (formConfirmacion && btnGuardarConfirmacion) {
           creadoEn: firebase.firestore.FieldValue.serverTimestamp()
         });
       } else if (editandoId !== clave) {
-        const previo = await coleccion.doc(clave).get();
-        if (previo.exists) {
+        if (docsCache.has(clave)) {
           confirmacionFeedback.textContent = "Ya existe otra confirmación con ese nombre y teléfono.";
           confirmacionFeedback.classList.add("error");
           btnGuardarConfirmacion.disabled = false;
